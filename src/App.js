@@ -1,7 +1,5 @@
 import React , {Component} from 'react';
 import './App.css';
-//import axios from 'axios';
-
 
 class App extends Component {
 	constructor () {
@@ -11,45 +9,26 @@ class App extends Component {
 			veri: [],
 			isLoading: false,
       		error: null,
-    };
-			this.handleClick = this.handleClick.bind(this)
-			
+    };	
 	}
 	componentDidMount(){
 		this.setState({ isLoading: true });
-		
 		this.tick();
-		
 		}
-		componentWillUnmount() {
-			  clearInterval(this.timerID);
+	tick(){
+		fetch("https://api.coinmarketcap.com/v1/ticker/")
+		.then(response=>{
+		if(response.ok){
+			return response.json();
+		}else{
+			throw new Error(response.Error);
 		}
-		tick(){
-			
-			fetch("https://api.coinmarketcap.com/v1/ticker/")
-			.then(response=>{
-			if(response.ok){
-				return response.json();
-			}else{
-				throw new Error(response.Error);
-			}
-			})
-			.then(data => this.setState({ veri: data,isLoading:false }))
-			.catch(error=>this.setState({error,isLoading:false}))
-		}
-		componentWillUpdate(){
-			this.tick();
-		}
-	renderLoadingView(){
-		return(
-			<p>Loading</p>
-		);
+		})
+		.then(data => this.setState({ veri: data,isLoading:false }))
+		.catch(error=>this.setState({error,isLoading:false}))
 	}
-	
-	handleClick () {
-  	/*axios.get('https://api.coinmarketcap.com/v1/ticker/bitcoin')
-		.then(response => this.setState({username: response.data.name}))*/
-		
+	componentWillUpdate(){
+		this.tick();
 	}
 	render () {
 		
